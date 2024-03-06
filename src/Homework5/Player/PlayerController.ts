@@ -71,6 +71,26 @@ export default class PlayerController extends StateMachineAI {
             ]
         });
 
+        owner.tweens.add("death", {
+            startDelay: 0,
+            duration: 500,
+            effects: [
+                {
+                    property: "rotation",
+                    start: 0,
+                    end: 4*Math.PI,
+                    ease: EaseFunctionType.IN_OUT_QUAD
+                },
+                {
+                    property: "alpha",
+                    start: 1,
+                    end: 0,
+                    ease: EaseFunctionType.IN_OUT_QUAD
+                }
+            ],
+            onEnd: HW5_Events.PLAYER_KILLED
+        });
+
     }
 
     initializePlatformer(): void {
@@ -125,5 +145,18 @@ export default class PlayerController extends StateMachineAI {
 		} else if(this.currentState instanceof Fall){
             Debug.log("playerstate", "Player State: Fall");
         }
+
+        let playerPos = this.owner.position.clone();
+        let tileheight = this.tilemap.getTileSize().y;
+        let tile = this.tilemap.getTileAtWorldPosition(new Vec2(playerPos.x, playerPos.y + tileheight));
+
+        if(tile === 8){
+            console.log("Player is on the switch");
+            this.tilemap.setTileAtWorldPos(new Vec2(playerPos.x, playerPos.y + tileheight), 9);
+            this.emitter.fireEvent(HW5_Events.PLAYER_HIT_SWITCH);
+            this.emitter.fireEvent(HW5_Events.PLAYER_ENTERED_LEVEL_END);
+        }
+
+
 	}
 }

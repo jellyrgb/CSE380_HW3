@@ -22,9 +22,22 @@ import BalloonState from "./BalloonState";
  */
 export default class ZeroGravity extends BalloonState {
 	onEnter(): void {
+		// Set the gravity to 0
+		this.gravity = 0;
+
+		(<AnimatedSprite>this.owner).animation.play("IDLE", true);
+	}
+
+	update(deltaT: number): void {
+		super.update(deltaT);
+
+		this.parent.velocity.x = this.parent.direction.x * this.parent.speed;
+			
+		this.owner.move(this.parent.velocity.scaled(deltaT));
 	}
 
 	onExit(): Record<string, any> {
+		(<AnimatedSprite>this.owner).animation.stop();
 		return {};
 	}
 }

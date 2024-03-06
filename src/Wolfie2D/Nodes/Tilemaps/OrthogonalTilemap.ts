@@ -106,6 +106,11 @@ export default class OrthogonalTilemap extends Tilemap {
         this.data[index] = type;
     }
 
+    setTileAtWorldPos(worldPos: Vec2, type: number): void {
+        let rowCol = new Vec2(Math.floor(worldPos.x / this.getTileSize().x), Math.floor(worldPos.y / this.getTileSize().y));
+        this.setTileAtRowCol(rowCol, type);
+    }
+
     /**
      * Sets the tile at the specified row and column
      * @param rowCol The position of the tile in tilemap space

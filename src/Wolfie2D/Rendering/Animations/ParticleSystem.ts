@@ -145,6 +145,8 @@ export default class ParticleSystem implements Updateable {
                         particle.setParticleInactive();
                     }
 
+                    particle.vel.y += 9.8 * particle.mass;
+
                     particle.move(particle.vel.scaled(deltaT));
                 }
                 else {
