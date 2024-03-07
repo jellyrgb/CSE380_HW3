@@ -1,5 +1,6 @@
 import State from "../../Wolfie2D/DataTypes/State/State";
 import StateMachine from "../../Wolfie2D/DataTypes/State/StateMachine";
+import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import GameEvent from "../../Wolfie2D/Events/GameEvent";
 import GameNode from "../../Wolfie2D/Nodes/GameNode";
 import AnimatedSprite from "../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
@@ -12,6 +13,8 @@ export default abstract class BalloonState extends State {
 	owner: GameNode;
 	gravity: number = 500;
 	parent: BalloonController;
+	playerPos: Vec2;
+	distance: number;
 
 	constructor(parent: StateMachine, owner: GameNode) {
 		super(parent);
@@ -24,6 +27,12 @@ export default abstract class BalloonState extends State {
 	 * and adjust the balloon gravity effects accordingly based on its color
 	 */
 	handleInput(event: GameEvent): void {
+		if (event.type == HW5_Events.PLAYER_MOVE) {
+			let playerPos = event.data.get("position");
+			let distance = playerPos.distanceTo(this.owner.position);
+			this.distance = distance;
+			this.playerPos = playerPos;
+		}
 		if (event.type == HW5_Events.SUIT_COLOR_CHANGE) {
 			let new_color = event.data.get("color");
 			if (this.parent.color == new_color){

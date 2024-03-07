@@ -21,8 +21,8 @@ import BalloonState from "./BalloonState";
  * are fired to get the player position
  */
 export default class ZeroGravity extends BalloonState {
+
 	onEnter(): void {
-		// Set the gravity to 0
 		this.gravity = 0;
 
 		(<AnimatedSprite>this.owner).animation.play("IDLE", true);
@@ -31,7 +31,18 @@ export default class ZeroGravity extends BalloonState {
 	update(deltaT: number): void {
 		super.update(deltaT);
 
-		this.parent.velocity.x = this.parent.direction.x * this.parent.speed;
+		let distance = this.distance;
+
+		if(distance < 10 * 32 && this.parent.velocity.x == this.parent.speed){
+			console.log("Player is close, double speed");
+			let directionToPlayer = this.playerPos.dirTo(this.owner.position);
+			directionToPlayer = directionToPlayer.normalize();
+
+			this.parent.velocity.x = -directionToPlayer.x * (this.parent.speed * 2);
+			this.parent.velocity.y = -directionToPlayer.y * (this.parent.speed * 2);
+		} else {
+			this.parent.velocity.x = this.parent.speed;
+		}
 			
 		this.owner.move(this.parent.velocity.scaled(deltaT));
 	}
