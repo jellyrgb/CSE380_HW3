@@ -387,10 +387,7 @@ export default class GameLevel extends Scene {
         balloon.addAI(BalloonController, aiOptions);
         balloon.setGroup("balloon");
 
-        // Set up the trigger for the balloon
         balloon.setTrigger("player", HW5_Events.PLAYER_HIT_BALLOON, null);
-
-        
     }
 
     // HOMEWORK 5 - TODO
@@ -425,26 +422,17 @@ export default class GameLevel extends Scene {
         
         let playerController = <PlayerController>player._ai;
 
-        // Get the color of the player's suit
         let playerSuitColor = playerController.suitColor;
 
-        // Get the color of the balloon
         let balloonColor = (<BalloonController>balloon._ai).color;
 
-        // Check if the player's suit color matches the balloon color
         if (playerSuitColor === balloonColor) {
-            // Player and balloon have the same color, player remains unharmed
             console.log("Player touched the same color, and was unharmed")
         } else {
-            // Player and balloon have different colors, player takes damage
-            // You can implement your damage logic here, for example:
-            // Decrease player's health, play a sound effect, etc.
-            // For now, let's just print a message
-            console.log("Player took damage!");
+            console.log("Player took damage");
             this.incPlayerLife(-1);
         }
 
-        // Set up the particle system
         let particleMass = 0;
         if (balloonColor === HW5_Color.RED) {
             particleMass = 1;
@@ -461,7 +449,6 @@ export default class GameLevel extends Scene {
         this.system.startSystem(2000, particleMass, balloon.position.clone());
         this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "balloon_pop", loop: false, holdReference: false});
         
-        // Regardless of the outcome, pop the balloon
         balloon.destroy();
 
         this.totalBalloons--;

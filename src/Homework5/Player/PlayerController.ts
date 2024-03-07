@@ -156,7 +156,5 @@ export default class PlayerController extends StateMachineAI {
             this.emitter.fireEvent(HW5_Events.PLAYER_HIT_SWITCH);
             this.emitter.fireEvent(HW5_Events.PLAYER_ENTERED_LEVEL_END);
         }
-
-
 	}
 }
